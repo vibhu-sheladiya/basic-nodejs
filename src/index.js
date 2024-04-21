@@ -13,10 +13,7 @@ createDb();
 
 app.use("/v1", router);
 
-app.use(
-  "/public/teacher_images",
-  express.static(path.join(__dirname, "./src/public/teacher_images"))
-);
+app.use(express.static(`./public`));
 server.listen(3000, () => {
   console.log(`server is done ${3000}`);
 });

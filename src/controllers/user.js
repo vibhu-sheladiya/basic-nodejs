@@ -227,10 +227,32 @@ const pagination = async (req, res) => {
 //   // Here you can write code to actually process the purchase
 // };
 
+
+const deleteManyUsers = async (req, res) => {
+  try {
+    const { _id } = req.body;
+    const result = await User.deleteMany({ _id: { $in: _id } });
+    if (result.deletedCount === 0) {
+      throw new Error("No users deleted");
+    }
+    return res.status(200).send({
+      success: true,
+      message: "Deleted Successfully",
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({
+      success: false,
+      message: `${err}`,
+    });
+  }
+};
+
 module.exports = {
   register,
   fetchList,
   login,
+  deleteManyUsers,
   updateUser,
   deleteUser,
   searchApi,
