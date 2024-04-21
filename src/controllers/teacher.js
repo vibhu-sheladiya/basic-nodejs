@@ -31,7 +31,7 @@ const registerTeacher = async (req, res) => {
       email,
       exp: moment().add(1, "days").unix(),
     };
-    const token = jwt.sign(payload, scretKey);
+    const token =await jwt.sign(payload, scretKey);
     const filter = {
       email,
       name,
@@ -56,7 +56,7 @@ const login = async (req, res) => {
       throw new Error("user not found");
     }
 
-    const comparepasword = bcrypt.compare(password, user.password);
+    const comparepasword =await bcrypt.compare(password, user.password);
     if (!comparepasword) {
       throw new Error("invalid password");
     }
