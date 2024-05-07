@@ -3,13 +3,14 @@ const jwt = require("jsonwebtoken");
 const User = require("../model/user.model");
 const scretKey = "csvscvsvsuwdvdfyd";
 const moment = require("moment");
+const Adress = require("../model/adress.model");
 
 const register = async (req, res) => {
   try {
-    const { email, name, password, role, confirmpass, mobile } = req.body;
-    if (!email || !name || !password || !role || !mobile || !confirmpass) {
-      throw new Error("please all feild required and fillup");
-    }
+    const { email, name, password, role, confirmpass, mobile,adress} = req.body;
+    // if (!email || !name || !password || !role || !mobile || !confirmpass || !adress) {
+    //   throw new Error("please all feild required and fillup");
+    // }
     if (password !== confirmpass) {
       throw new Error("password does not match");
     }
@@ -18,6 +19,10 @@ const register = async (req, res) => {
       throw new Error("user already existing this email");
     }
     const hashpassword = await bcrypt.hash(password, 8);
+    const address = new Adress({
+      name: adress
+    });
+    await address.save();
     const payload = {
       email,
       exp: moment().add(1, "days").unix(),
@@ -30,6 +35,7 @@ const register = async (req, res) => {
       role,
       mobile,
       token,
+      adress: address._id
     };
     const data = await User.create(filter);
     return res.status(200).json({ data: data, message: "created done" });
